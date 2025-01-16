@@ -39,6 +39,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.ahmetozen.incomeexpense.data.model.ExpenseEntity
@@ -48,8 +49,8 @@ fun ExpenseScreen(
     navController: NavController
 ) {
     val viewModel = hiltViewModel<ExpenseViewModel>()
-    val total = viewModel.total.collectAsState()
-    val expenses = viewModel.expenses.collectAsState(emptyList())
+    val total = viewModel.total.collectAsStateWithLifecycle()
+    val expenses = viewModel.expenses.collectAsStateWithLifecycle()
 
     var category by remember { mutableStateOf("") }
     var amount by remember { mutableStateOf("") }

@@ -2,23 +2,18 @@ package com.ahmetozen.incomeexpense.ui.home
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CardElevation
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,27 +21,23 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.ahmetozen.incomeexpense.ui.expense.ExpenseViewModel
-import com.ahmetozen.incomeexpense.ui.income.IncomeViewModel
 
 @Composable
 fun HomeScreen(
     navController: NavController
 ) {
-    val incomeViewModel = hiltViewModel<IncomeViewModel>()
-    val expenseViewModel = hiltViewModel<ExpenseViewModel>()
-    val totalIncome by incomeViewModel.total.collectAsState(0.0)
-    val totalExpense by expenseViewModel.total.collectAsState(0.0)
-
-    val safeIncome = totalIncome ?: 0.0
-    val safeExpense = totalExpense ?: 0.0
+    val homeViewModel = hiltViewModel<HomeViewModel>()
+    val totalIncome by homeViewModel.totalincome.collectAsStateWithLifecycle()
+    val totalExpense by homeViewModel.totalexpense.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        incomeViewModel.getTotal()
-        expenseViewModel.getTotal()
+        homeViewModel.getTotalIncomes()
+        homeViewModel.getTotalExpenses()
     }
+
 
     Column(
         modifier = Modifier
@@ -76,17 +67,17 @@ fun HomeScreen(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 Text(
-                    text = "Toplam Gelir: ${String.format("%.2f", safeIncome)} ₺",
+                    text = "Toplam Gelir: ${String.format("%.2f", totalIncome)} ₺",
                     style = MaterialTheme.typography.titleMedium,
                     color = Color(0xFF388E3C)
                 )
                 Text(
-                    text = "Toplam Gider: ${String.format("%.2f", safeExpense)} ₺",
+                    text = "Toplam Gider: ${String.format("%.2f", totalExpense)} ₺",
                     style = MaterialTheme.typography.titleMedium,
                     color = Color(0xFFD32F2F)
                 )
                 Text(
-                    text = "Kalan Bakiye: ${String.format("%.2f", safeIncome - safeExpense)} ₺",
+                    text = "Kalan Bakiye: ${String.format("%.2f", (totalIncome?:0.0) - (totalExpense?:0.0))} ₺",
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
                     color = MaterialTheme.colorScheme.primary
                 )
@@ -120,8 +111,6 @@ fun HomeScreen(
         }
     }
 }
-
-
 
 @Preview
 @Composable

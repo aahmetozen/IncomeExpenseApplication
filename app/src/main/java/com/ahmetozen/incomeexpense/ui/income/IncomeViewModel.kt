@@ -56,11 +56,7 @@ class IncomeViewModel @Inject constructor(
 
     fun getTotal(){
         viewModelScope.launch {
-            getTotalIncomeUseCase().collect{result ->
-                if (result != null) {
-                    _total.value=result
-                }
-            }
+            getTotalIncomeUseCase().collect{result -> result.let { _total.value=it } }
         }
     }
 }

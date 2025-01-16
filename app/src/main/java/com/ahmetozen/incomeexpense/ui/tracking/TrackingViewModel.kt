@@ -45,31 +45,3 @@ class TrackingViewModel @Inject constructor (
         }
     }
 }
-
-
-
-/*
-*
-* class HomeViewModel(
-    private val getAllExpensesUseCase: getAllExpenseUC,
-    private val getAllIncomesUseCase: getAllIncomesUC
-) : ViewModel() {
-
-    private val _expenses = MutableStateFlow<List<ExpenseEntity>>(emptyList())
-    val expenses: StateFlow<List<ExpenseEntity>> = _expenses
-
-    private val _incomes = MutableStateFlow<List<IncomeEntity>>(emptyList())
-    val incomes: StateFlow<List<IncomeEntity>> = _incomes
-
-    fun fetchExpenses() {
-        viewModelScope.launch {
-            _expenses.value = getAllExpensesUseCase()
-        }
-    }
-
-    fun fetchIncomes() {
-        viewModelScope.launch {
-            _incomes.value = getAllIncomesUseCase()
-        }
-    }
-} */

@@ -53,56 +53,8 @@ class ExpenseViewModel @Inject constructor(
 
     fun getTotal(){
         viewModelScope.launch {
-            getTotalExpenseUseCase().collect{result -> _total.value=result!!}
+            getTotalExpenseUseCase().collect{result -> result.let { _total.value=it }}
         }
     }
 
 }
-
-/*
-@HiltViewModel
-class ExpenseViewModel @Inject constructor(
-    private val expenseDaoImpl: ExpenseDaoImpl,
-    private val getAllExpensesUseCase: GetAllExpenseUseCase
-) : ViewModel() {
-
-    private val _expenses = MutableStateFlow<List<ExpenseEntity>>(emptyList())
-    val expenses: StateFlow<List<ExpenseEntity>> = _expenses
-    val total=MutableLiveData<Double>()
-
-    init {
-        getAll()
-        getTotal()
-    }
-
-
-    fun insert(expense:ExpenseEntity){
-        viewModelScope.launch {
-            expenseDaoImpl.insert(expense)
-        }
-    }
-
-    fun delete(expense:ExpenseEntity){
-        viewModelScope.launch {
-            expenseDaoImpl.delete(expense)
-        }
-    }
-
-    fun getAll(){
-        viewModelScope.launch {
-            val source=getAllExpensesUseCase()
-            source.collect{ result->
-                _expenses.value=result
-            }
-
-        }
-    }
-
-    fun getTotal(){
-        viewModelScope.launch {
-            total.value= expenseDaoImpl.getTotal()
-        }
-    }
-
-}
-*/
